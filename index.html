@@ -287,7 +287,7 @@
     <h2>kicking ass and taking names!</h2>
     <div class="about-grid">
       <div class="photo-frame">
-        <img src="https://github.com/Git-Darryl/darrylhall.com/blob/main/me.png" alt="Darryl" />
+        <img src="me.png" alt="Darryl" />
         <span class="photo-caption">// replace with your photo</span>
       </div>
       <div class="about-text">
@@ -321,13 +321,19 @@
     { prompt: true, text: 'whoami' },
     { out: true, text: 'Darryl — security engineer' },
     { prompt: true, text: 'cat aboutme.md' },
-    { out: true, html: 'Security Engineery Stuff <span class="term-highlight">'},
+    { out: true, html: 'Security Engineery Stuff <span class="term-highlight">building things that hold up under pressure</span>'},
     { prompt: true, text: 'status --print' },
     { out: true, html: '<span class="term-highlight">[ ACTIVE ]</span> Building this website.' }
   ];
 
   const body = document.getElementById('termBody');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let reduce = false;
+  try {
+    reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  } catch (e) {
+    reduce = false;
+  }
 
   function renderStatic() {
     body.innerHTML = lines.map(l => {
