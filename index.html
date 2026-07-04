@@ -257,7 +257,7 @@
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="#top">darryl<span>@</span>darrylhall.com</a>
+    <a class="brand" href="#top">spam<span>@</span>darrylhall.com</a>
     <div class="navlinks">
       <a href="#about">about</a>
       <a href="#contact">contact</a>
@@ -280,6 +280,23 @@
     </div>
   </div>
 </header>
+
+<section id="about" class="about">
+  <div class="wrap">
+    <p class="eyebrow">// about</p>
+    <h2>kicking ass and taking names!</h2>
+    <div class="about-grid">
+      <div class="photo-frame">
+        <img src="https://github.com/Git-Darryl/darrylhall.com/blob/main/me.png" alt="Darryl" />
+        <span class="photo-caption">// replace with your photo</span>
+      </div>
+      <div class="about-text">
+        <p>I'm Darryl, a security Engineer</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="contact" class="contact">
   <div class="wrap">
     <p class="eyebrow">// reach out</p>
@@ -294,7 +311,7 @@
 </section>
 
 <footer>
-  built with intent · no trackers, no ads · last scanned <span id="today"></span>
+  built with no intention · no trackers, no ads · last scanned <span id="today"></span>
 </footer>
 
 <script>
@@ -302,9 +319,11 @@
 
   const lines = [
     { prompt: true, text: 'whoami' },
-    { out: true, text: 'darryl — security engineer' },
-   
-    { out: true, html: '<span class="term-highlight">[ ACTIVATE ]</span> }
+    { out: true, text: 'Darryl — security engineer' },
+    { prompt: true, text: 'cat aboutme.md' },
+    { out: true, html: 'Security Engineery Stuff <span class="term-highlight">'},
+    { prompt: true, text: 'status --print' },
+    { out: true, html: '<span class="term-highlight">[ ACTIVE ]</span> Building this website.' }
   ];
 
   const body = document.getElementById('termBody');
