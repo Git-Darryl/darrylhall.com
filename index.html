@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darryl — Security Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d1520;
+    --ink-raised: #121b28;
+    --hairline: #24304100;
+    --line: #26334580;
+    --paper: #e8ecf1;
+    --muted: #7c8b9e;
+    --steel: #5c7ea3;
+    --amber: #e6a13c;
+    --danger: #d1554a;
+    --ok: #5fae82;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--amber); color: var(--ink); }
+
+  a { color: var(--amber); }
+  a:focus-visible, button:focus-visible, .link:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(13, 21, 32, 0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .brand {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    text-decoration: none;
+  }
+  .brand span { color: var(--amber); }
+  .navlinks { display: flex; gap: 28px; font-family: var(--mono); font-size: 13px; }
+  .navlinks a { color: var(--muted); text-decoration: none; }
+  .navlinks a:hover { color: var(--paper); }
+
+  /* ---------- HERO / TERMINAL ---------- */
+  .hero {
+    padding: 90px 0 70px;
+    border-bottom: 1px solid var(--line);
+  }
+  .terminal {
+    background: var(--ink-raised);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .term-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #0a1119;
+    border-bottom: 1px solid var(--line);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.r { background: #d1554a; }
+  .dot.y { background: #e6a13c; }
+  .dot.g { background: #5fae82; }
+  .term-title {
+    margin-left: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .term-body {
+    padding: 28px 26px 34px;
+    font-family: var(--mono);
+    font-size: 15px;
+    min-height: 210px;
+  }
+  .term-line { margin: 0 0 10px; white-space: pre-wrap; }
+  .prompt { color: var(--ok); }
+  .path { color: var(--steel); }
+  .term-out { color: var(--paper); }
+  .term-label { color: var(--muted); }
+  .term-highlight { color: var(--amber); font-weight: 700; }
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 17px;
+    background: var(--amber);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .hero-actions {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    text-decoration: none;
+    padding: 11px 18px;
+    border-radius: 5px;
+    border: 1px solid var(--line);
+    color: var(--paper);
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .btn:hover { border-color: var(--amber); transform: translateY(-1px); }
+  .btn.primary { background: var(--amber); color: var(--ink); border-color: var(--amber); font-weight: 700; }
+  .btn.primary:hover { background: #f0ae4c; }
+
+  /* ---------- SECTION HEADERS ---------- */
+  section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin: 0 0 10px;
+  }
+  h2 {
+    font-family: var(--mono);
+    font-size: 22px;
+    margin: 0 0 22px;
+    color: var(--paper);
+    font-weight: 700;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about p {
+    max-width: 62ch;
+    color: #c3cbd6;
+    font-size: 16px;
+  }
+  .about p + p { margin-top: 14px; }
+
+  /* ---------- ABOUT PHOTO LAYOUT ---------- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .photo-frame {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .photo-frame img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    display: block;
+  }
+  .photo-caption {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact { border-bottom: none; padding-bottom: 90px; }
+  .contact-grid {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .card {
+    background: var(--ink-raised);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+    flex: 1 1 220px;
+    text-decoration: none;
+  }
+  .card:hover { border-color: var(--amber); }
+  .card .k {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .card .v {
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--paper);
+    margin-top: 6px;
+  }
+
+  footer {
+    padding: 26px 0 50px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .photo-frame { width: 160px; }
+    .term-body { font-size: 13px; }
+    h2 { font-size: 19px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">darryl<span>@</span>darrylhall.com</a>
+    <div class="navlinks">
+      <a href="#about">about</a>
+      <a href="#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="terminal">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="term-title">session — bash</span>
+      </div>
+      <div class="term-body" id="termBody"></div>
+    </div>
+
+    <div class="hero-actions">
+      <a class="btn primary" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</header>
+<section id="contact" class="contact">
+  <div class="wrap">
+    <p class="eyebrow">// reach out</p>
+    <h2>Open a channel</h2>
+    <div class="contact-grid">
+      <a class="card" href="mailto:spam@darrylhall.com">
+        <div class="k">Email</div>
+        <div class="v">spam@darrylhall.com</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  built with intent · no trackers, no ads · last scanned <span id="today"></span>
+</footer>
+
+<script>
+  document.getElementById('today').textContent = new Date().toISOString().slice(0,10);
+
+  const lines = [
+    { prompt: true, text: 'whoami' },
+    { out: true, text: 'darryl — security engineer' },
+   
+    { out: true, html: '<span class="term-highlight">[ ACTIVATE ]</span> }
+  ];
+
+  const body = document.getElementById('termBody');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function renderStatic() {
+    body.innerHTML = lines.map(l => {
+      if (l.prompt) return `<p class="term-line"><span class="prompt">darryl@sec</span><span class="path">:~$</span> ${l.text}</p>`;
+      return `<p class="term-line term-out">${l.html || l.text}</p>`;
+    }).join('') + '<span class="cursor"></span>';
+  }
+
+  if (reduce) {
+    renderStatic();
+  } else {
+    let i = 0;
+    function typeLine() {
+      if (i >= lines.length) return;
+      const l = lines[i];
+      const p = document.createElement('p');
+      p.className = 'term-line' + (l.out ? ' term-out' : '');
+      body.appendChild(p);
+
+      if (l.prompt) {
+        const prefix = `<span class="prompt">darryl@sec</span><span class="path">:~$</span> `;
+        let charIndex = 0;
+        const text = l.text;
+        p.innerHTML = prefix;
+        const typer = setInterval(() => {
+          p.innerHTML = prefix + text.slice(0, charIndex + 1);
+          charIndex++;
+          if (charIndex >= text.length) {
+            clearInterval(typer);
+            i++;
+            setTimeout(typeLine, 220);
+          }
+        }, 28);
+      } else {
+        p.innerHTML = l.html || l.text;
+        i++;
+        setTimeout(typeLine, 260);
+      }
+    }
+    typeLine();
+    setTimeout(() => {
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      body.appendChild(cursor);
+    }, lines.length * 700 + 400);
+  }
+</script>
+
+</body>
+</html>
