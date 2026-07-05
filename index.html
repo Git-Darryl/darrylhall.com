@@ -150,6 +150,78 @@
   .btn.primary { background: var(--amber); color: var(--ink); border-color: var(--amber); font-weight: 700; }
   .btn.primary:hover { background: #f0ae4c; }
 
+  /* ---------- TRAFFIC MAP ---------- */
+  .traffic-map { padding-top: 64px; }
+  .traffic-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+    gap: 24px;
+    align-items: center;
+  }
+  .traffic-copy p {
+    max-width: 60ch;
+    color: #c3cbd6;
+    font-size: 16px;
+    margin: 0 0 16px;
+  }
+  .traffic-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .traffic-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--paper);
+    background: rgba(18, 27, 40, 0.9);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 12px;
+  }
+  .dot-label {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-label.source { background: var(--amber); }
+  .dot-label.dest { background: var(--ok); }
+  .map-card {
+    background: rgba(18, 27, 40, 0.92);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  .map-card svg { width: 100%; height: auto; display: block; }
+  .land { fill: rgba(95, 174, 130, 0.24); stroke: rgba(95, 174, 130, 0.55); stroke-width: 1.2; }
+  .route-line {
+    fill: none;
+    stroke: var(--amber);
+    stroke-width: 3;
+    stroke-dasharray: 10 8;
+    stroke-linecap: round;
+    animation: dash 2.4s linear infinite;
+  }
+  .node {
+    fill: var(--paper);
+    stroke: rgba(255,255,255,0.25);
+    stroke-width: 1.5;
+  }
+  .node.source { fill: var(--amber); }
+  .node.dest { fill: var(--ok); }
+  .pulse {
+    fill: var(--amber);
+    opacity: 0.9;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  .grid-line { stroke: rgba(124,139,158,0.22); stroke-width: 1; }
+  @keyframes dash { to { stroke-dashoffset: -180; } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.75; } 50% { transform: scale(1.35); opacity: 1; } }
+
   /* ---------- SECTION HEADERS ---------- */
   section { padding: 64px 0; border-bottom: 1px solid var(--line); }
   .eyebrow {
@@ -259,6 +331,7 @@
   <div class="wrap">
     <a class="brand" href="#top">spam<span>@</span>darrylhall.com</a>
     <div class="navlinks">
+      <a href="#traffic">traffic</a>
       <a href="#about">about</a>
       <a href="#contact">contact</a>
     </div>
@@ -280,6 +353,48 @@
     </div>
   </div>
 </header>
+
+<section id="traffic" class="traffic-map">
+  <div class="wrap">
+    <p class="eyebrow">// traffic path</p>
+    <h2>Website Traffic</h2>
+    <div class="traffic-shell">
+      <div class="traffic-copy">
+        <div class="traffic-labels">
+          <div class="traffic-pill"><span class="dot-label source"></span>Source · 203.0.113.42</div>
+          <div class="traffic-pill"><span class="dot-label dest"></span>Destination · darrylhall.com / 198.51.100.9</div>
+        </div>
+      </div>
+      <div class="map-card">
+        <svg viewBox="0 0 640 320" role="img" aria-label="Animated map showing traffic from a source IP to a destination IP">
+          <rect x="18" y="18" width="604" height="284" rx="16" fill="#0a1119" stroke="rgba(255,255,255,0.06)" />
+          <g opacity="0.7">
+            <path class="grid-line" d="M50 70H590" />
+            <path class="grid-line" d="M50 120H590" />
+            <path class="grid-line" d="M50 170H590" />
+            <path class="grid-line" d="M50 220H590" />
+            <path class="grid-line" d="M50 270H590" />
+            <path class="grid-line" d="M120 40V280" />
+            <path class="grid-line" d="M220 40V280" />
+            <path class="grid-line" d="M320 40V280" />
+            <path class="grid-line" d="M420 40V280" />
+            <path class="grid-line" d="M520 40V280" />
+          </g>
+          <path class="land" d="M94 110c10-18 31-27 48-25 12 1 27 10 35 25-12 6-17 18-18 32-9-4-18-7-28-7-13 0-26 5-37 12-8-12-12-24-10-37z" />
+          <path class="land" d="M190 90c20-12 40-14 60-8 12 4 20 12 24 25-12 3-25 8-37 18-14-8-28-12-43-10-9-11-10-18-4-25z" />
+          <path class="land" d="M284 118c16-10 34-12 49-8 9 2 16 6 23 13-8 11-20 20-34 27-12-5-24-10-35-16-4-6-4-12-3-16z" />
+          <path class="land" d="M430 96c18-13 39-17 58-12 13 4 22 14 26 27-11 5-31 14-45 23-15-7-26-17-32-24-4-5-4-9-7-14z" />
+          <path class="land" d="M468 174c13-6 22-3 30 6 10 11 10 24 3 35-12 6-32 12-47 10-8-12-12-26-6-37 4-6 8-9 20-14z" />
+          <path class="route-line" d="M122 120C232 76 338 102 520 168" />
+          <circle class="node source" cx="122" cy="120" r="8" />
+          <circle class="node dest" cx="520" cy="168" r="8" />
+          <circle class="pulse" cx="122" cy="120" r="18" />
+          <circle class="pulse" cx="520" cy="168" r="18" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="about" class="about">
   <div class="wrap">
