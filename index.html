@@ -181,6 +181,10 @@
     border-radius: 999px;
     padding: 8px 12px;
   }
+  .source-meta {
+    color: var(--muted);
+    margin-left: 4px;
+  }
   .dot-label {
     width: 9px;
     height: 9px;
@@ -361,8 +365,8 @@
     <div class="traffic-shell">
       <div class="traffic-copy">
         <div class="traffic-labels">
-          <div class="traffic-pill"><span class="dot-label source"></span>Source · 203.0.113.42</div>
-          <div class="traffic-pill"><span class="dot-label dest"></span>Destination · darrylhall.com / 198.51.100.9</div>
+          <div class="traffic-pill"><span class="dot-label source"></span>Source · <span id="source-ip">detecting…</span><span id="source-location" class="source-meta"></span></div>
+          <div class="traffic-pill"><span class="dot-label dest"></span>Destination · darrylhall.com</div>
         </div>
       </div>
       <div class="map-card">
@@ -430,6 +434,45 @@
 
 <script>
   document.getElementById('today').textContent = new Date().toISOString().slice(0,10);
+
+  const sourceIpEl = document.getElementById('source-ip');
+  const sourceLocationEl = document.getElementById('source-location');
+
+  async function resolveSourceIp() {
+    if (!sourceIpEl) return;
+    sourceIpEl.textContent = 'detecting…';
+    if (sourceLocationEl) sourceLocationEl.textContent = '';
+
+    try {
+      const [ipResponse, geoResponse] = await Promise.all([
+        fetch('https://api.ipify.org?format=json'),
+        fetch('https://ipapi.co/json/')
+      ]);
+
+      let ip = 'unknown';
+      if (ipResponse.ok) {
+        const ipData = await ipResponse.json();
+        ip = ipData.ip || 'unknown';
+      }
+
+      let location = '';
+      if (geoResponse.ok) {
+        const geoData = await geoResponse.json();
+        const parts = [geoData.city, geoData.region, geoData.country_name].filter(Boolean);
+        if (parts.length) {
+          location = ` · ${parts.slice(0, 2).join(', ')}`;
+        }
+      }
+
+      sourceIpEl.textContent = ip;
+      if (sourceLocationEl) sourceLocationEl.textContent = location;
+    } catch (error) {
+      sourceIpEl.textContent = 'unavailable';
+      if (sourceLocationEl) sourceLocationEl.textContent = '';
+    }
+  }
+
+  resolveSourceIp();
 
   const lines = [
     { prompt: true, text: 'whoami' },
