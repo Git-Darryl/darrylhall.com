@@ -314,6 +314,25 @@
     font-size: 12px;
     color: var(--muted);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .visitor-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(18, 27, 40, 0.8);
+    color: var(--paper);
+    font-size: 11px;
+  }
+  .visitor-counter .count {
+    color: var(--amber);
+    font-weight: 700;
   }
 
   @media (max-width: 640px) {
@@ -429,11 +448,28 @@
 </section>
 
 <footer>
-  built with no intention · no trackers, no ads · last scanned <span id="today"></span>
+  <div>built with no intention · no trackers, no ads · last scanned <span id="today"></span></div>
+  <div class="visitor-counter" aria-live="polite">
+    <span>Visitors</span>
+    <span id="visitor-count" class="count">0</span>
+  </div>
 </footer>
 
 <script>
   document.getElementById('today').textContent = new Date().toISOString().slice(0,10);
+
+  const visitorCountEl = document.getElementById('visitor-count');
+  if (visitorCountEl) {
+    try {
+      const storageKey = 'darrylhall-visitor-count';
+      const currentCount = Number(localStorage.getItem(storageKey) || 0);
+      const nextCount = currentCount + 1;
+      localStorage.setItem(storageKey, String(nextCount));
+      visitorCountEl.textContent = String(nextCount);
+    } catch (error) {
+      visitorCountEl.textContent = '1';
+    }
+  }
 
   const sourceIpEl = document.getElementById('source-ip');
   const sourceLocationEl = document.getElementById('source-location');
