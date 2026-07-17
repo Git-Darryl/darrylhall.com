@@ -389,9 +389,9 @@
         </div>
       </div>
       <div class="map-card">
-        <svg viewBox="0 0 640 320" role="img" aria-label="Animated map showing traffic from a source IP to a destination IP">
-          <rect x="18" y="18" width="604" height="284" rx="16" fill="#0a1119" stroke="rgba(255,255,255,0.06)" />
-          <g opacity="0.7">
+        <svg id="traffic-map" viewBox="0 0 640 320" role="img" aria-label="Animated map showing traffic from your IP address to the website destination">
+          <rect x="18" y="18" width="604" height="284" rx="16" fill="#07111c" stroke="rgba(255,255,255,0.06)" />
+          <g opacity="0.62">
             <path class="grid-line" d="M50 70H590" />
             <path class="grid-line" d="M50 120H590" />
             <path class="grid-line" d="M50 170H590" />
@@ -403,14 +403,18 @@
             <path class="grid-line" d="M420 40V280" />
             <path class="grid-line" d="M520 40V280" />
           </g>
-          <path class="land" d="M94 110c10-18 31-27 48-25 12 1 27 10 35 25-12 6-17 18-18 32-9-4-18-7-28-7-13 0-26 5-37 12-8-12-12-24-10-37z" />
-          <path class="land" d="M190 90c20-12 40-14 60-8 12 4 20 12 24 25-12 3-25 8-37 18-14-8-28-12-43-10-9-11-10-18-4-25z" />
-          <path class="land" d="M284 118c16-10 34-12 49-8 9 2 16 6 23 13-8 11-20 20-34 27-12-5-24-10-35-16-4-6-4-12-3-16z" />
-          <path class="land" d="M430 96c18-13 39-17 58-12 13 4 22 14 26 27-11 5-31 14-45 23-15-7-26-17-32-24-4-5-4-9-7-14z" />
-          <path class="land" d="M468 174c13-6 22-3 30 6 10 11 10 24 3 35-12 6-32 12-47 10-8-12-12-26-6-37 4-6 8-9 20-14z" />
-          <path class="route-line" d="M122 120C232 76 338 102 520 168" />
-          <circle class="node source" cx="122" cy="120" r="8" />
-          <circle class="node dest" cx="520" cy="168" r="8" />
+          <path class="land" d="M92 114c10-24 30-39 55-39 19 0 33 8 44 22-6 8-11 17-16 29-12 3-25 6-36 12-14 8-24 18-31 33-7-12-10-24-8-36 0-9 2-15 7-21z" />
+          <path class="land" d="M184 88c18-16 43-21 63-16 16 5 27 15 35 31-10 10-20 20-34 28-15-4-31-8-45-5-10-10-13-20-19-38z" />
+          <path class="land" d="M255 109c18-14 39-18 59-13 17 5 29 18 35 36-10 10-24 20-40 25-20 7-38 4-55-5-4-12-4-25 1-43z" />
+          <path class="land" d="M358 96c19-16 43-22 66-17 15 3 27 12 36 25-8 14-18 25-32 36-18-6-37-7-57-1-9-12-10-26-13-43z" />
+          <path class="land" d="M433 171c13-11 29-16 44-15 17 1 31 10 39 24-6 15-16 28-31 38-15 8-31 10-45 5-8-13-9-29-7-52z" />
+          <path class="land" d="M106 200c12-14 31-22 49-20 15 1 28 8 38 20-13 11-29 20-44 27-14 6-31 7-44 0-2-9-1-18 1-27z" />
+          <path class="land" d="M158 226c10-10 25-16 39-15 14 2 24 9 32 21-10 10-23 17-36 22-13 4-29 3-41-4-2-8-2-14 6-24z" />
+          <path class="land" d="M270 220c17-13 40-15 59-8 14 6 25 16 31 31-13 10-28 17-45 20-17 2-35-2-49-12-4-10-2-22 4-31z" />
+          <path class="land" d="M374 216c16-14 36-20 55-18 17 2 31 13 41 28-9 11-21 20-35 25-19 6-39 5-57-2-7-9-7-19-4-33z" />
+          <path class="route-line" id="route-line" d="M122 120 C260 90, 360 100, 520 168" />
+          <circle class="node source" id="source-marker" cx="122" cy="120" r="8" />
+          <circle class="node dest" id="dest-marker" cx="520" cy="168" r="8" />
           <circle class="pulse" cx="122" cy="120" r="18" />
           <circle class="pulse" cx="520" cy="168" r="18" />
         </svg>
@@ -473,6 +477,38 @@
 
   const sourceIpEl = document.getElementById('source-ip');
   const sourceLocationEl = document.getElementById('source-location');
+  const sourceMarkerEl = document.getElementById('source-marker');
+  const routeLineEl = document.getElementById('route-line');
+  const destMarkerEl = document.getElementById('dest-marker');
+
+  const destinationCoords = { lat: 47.6, lon: -122.3 };
+
+  function projectToMap(lat, lon) {
+    const x = 40 + ((lon + 180) / 360) * 560;
+    const y = 40 + ((90 - lat) / 180) * 240;
+    return { x, y };
+  }
+
+  function updateTrafficMap(sourceCoords) {
+    const sourcePoint = sourceCoords ? projectToMap(sourceCoords.lat, sourceCoords.lon) : projectToMap(destinationCoords.lat, destinationCoords.lon);
+    const destPoint = projectToMap(destinationCoords.lat, destinationCoords.lon);
+
+    if (sourceMarkerEl) {
+      sourceMarkerEl.setAttribute('cx', sourcePoint.x);
+      sourceMarkerEl.setAttribute('cy', sourcePoint.y);
+    }
+
+    if (destMarkerEl) {
+      destMarkerEl.setAttribute('cx', destPoint.x);
+      destMarkerEl.setAttribute('cy', destPoint.y);
+    }
+
+    if (routeLineEl) {
+      const controlX = (sourcePoint.x + destPoint.x) / 2;
+      const controlY = Math.min(sourcePoint.y, destPoint.y) - 46;
+      routeLineEl.setAttribute('d', `M ${sourcePoint.x} ${sourcePoint.y} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${destPoint.x} ${destPoint.y}`);
+    }
+  }
 
   async function resolveSourceIp() {
     if (!sourceIpEl) return;
@@ -492,19 +528,25 @@
       }
 
       let location = '';
+      let sourceCoords = null;
       if (geoResponse.ok) {
         const geoData = await geoResponse.json();
         const parts = [geoData.city, geoData.region, geoData.country_name].filter(Boolean);
         if (parts.length) {
           location = ` · ${parts.slice(0, 2).join(', ')}`;
         }
+        if (Number.isFinite(geoData.latitude) && Number.isFinite(geoData.longitude)) {
+          sourceCoords = { lat: geoData.latitude, lon: geoData.longitude };
+        }
       }
 
       sourceIpEl.textContent = ip;
       if (sourceLocationEl) sourceLocationEl.textContent = location;
+      updateTrafficMap(sourceCoords);
     } catch (error) {
       sourceIpEl.textContent = 'unavailable';
       if (sourceLocationEl) sourceLocationEl.textContent = '';
+      updateTrafficMap(null);
     }
   }
 
